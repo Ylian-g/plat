@@ -1,43 +1,45 @@
 package Foreach.cda.Plat.entity;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import jakarta.persistence.CascadeType;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 
+
+@Getter
+@Setter
 @Entity
 @Table(name = "ingredients")
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
 public class Ingredient {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "IN_ID")
     private Long id;
     
-    @Column(nullable = false)
+    @Column(name = "IN_Libelle", nullable = false)
     private String libelle;
     
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @Column(name = "IN_Type", nullable = false)
     private TypeIngredient type;
     
-    @Column(nullable = false)
+    @Column(name = "IN_NombreCalorie", nullable = false)
     private Integer nombreCalorie;
     
-    @OneToMany(mappedBy = "ingredient", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<RecetteIngredient> recetteIngredients = new ArrayList<>();
+    @OneToMany(mappedBy = "ingredient", targetEntity = RecetteIngredient.class, fetch = FetchType.LAZY)
+    @JsonIgnore
+    private List<RecetteIngredient> recetteIngredients;
 }
