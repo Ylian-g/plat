@@ -1,0 +1,50 @@
+CREATE DATABASE IF NOT EXISTS plat_db;
+USE plat_db;
+
+CREATE TABLE IF NOT EXISTS users (
+    US_ID BIGINT AUTO_INCREMENT PRIMARY KEY,
+    US_Nom VARCHAR(255) NOT NULL,
+    US_Prenom VARCHAR(255) NOT NULL,
+    US_Role VARCHAR(255) NOT NULL,
+    US_Password VARCHAR(255) NOT NULL,
+    US_Telephone VARCHAR(10) NOT NULL UNIQUE,
+    US_Mail VARCHAR(255) NOT NULL UNIQUE
+);
+
+
+CREATE TABLE IF NOT EXISTS recettes (
+    RE_ID BIGINT AUTO_INCREMENT PRIMARY KEY,
+    RE_NomPlat VARCHAR(255) NOT NULL,
+    RE_DureePreparation INT NOT NULL,
+    RE_DureeCuisson INT NOT NULL,
+    RE_NombreCalorique INT NOT NULL,
+    RE_Partage TINYINT(1) NOT NULL DEFAULT 0,
+    createur_id BIGINT NOT NULL,
+    FOREIGN KEY (createur_id) REFERENCES users(US_ID)
+);
+
+
+CREATE TABLE IF NOT EXISTS ingredients (
+    IN_ID BIGINT AUTO_INCREMENT PRIMARY KEY,
+    IN_Libelle VARCHAR(255) NOT NULL,
+    IN_Type VARCHAR(255) NOT NULL,
+    IN_NombreCalorie INT NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS recette_ingredients (
+    RI_ID BIGINT AUTO_INCREMENT PRIMARY KEY,
+    recette_id BIGINT NOT NULL,
+    ingredient_id BIGINT NOT NULL,
+    RI_Quantite DOUBLE NOT NULL,
+    RI_Unite VARCHAR(255) NOT NULL,
+    FOREIGN KEY (recette_id) REFERENCES recettes(RE_ID),
+    FOREIGN KEY (ingredient_id) REFERENCES ingredients(IN_ID)
+);
+
+CREATE TABLE IF NOT EXISTS user_favoris (
+    user_id BIGINT NOT NULL,
+    recette_id BIGINT NOT NULL,
+    PRIMARY KEY (user_id, recette_id),
+    FOREIGN KEY (user_id) REFERENCES users(US_ID),
+    FOREIGN KEY (recette_id) REFERENCES recettes(RE_ID)
+);

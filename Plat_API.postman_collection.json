@@ -1,0 +1,395 @@
+{
+	"info": {
+		"name": "Plat API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:8080/api"
+		},
+		{
+			"key": "token",
+			"value": ""
+		}
+	],
+	"item": [
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "Inscription",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var json = pm.response.json();",
+									"if (json.token) {",
+									"    pm.collectionVariables.set('token', json.token);",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"nom\": \"Dupont\",\n    \"prenom\": \"Jean\",\n    \"role\": \"ADMIN\",\n    \"password\": \"motdepasse123\",\n    \"telephone\": \"0612345678\",\n    \"mail\": \"jean@test.com\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/auth/register",
+							"host": ["{{base_url}}"],
+							"path": ["auth", "register"]
+						}
+					}
+				},
+				{
+					"name": "Connexion",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var json = pm.response.json();",
+									"if (json.token) {",
+									"    pm.collectionVariables.set('token', json.token);",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"mail\": \"jean@test.com\",\n    \"password\": \"motdepasse123\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/auth/login",
+							"host": ["{{base_url}}"],
+							"path": ["auth", "login"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Ingredients",
+			"item": [
+				{
+					"name": "Ajouter un ingredient",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"libelle\": \"Tomate\",\n    \"type\": \"LEGUME\",\n    \"nombreCalorie\": 18\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/ingredients",
+							"host": ["{{base_url}}"],
+							"path": ["ingredients"]
+						}
+					}
+				},
+				{
+					"name": "Ajouter un autre ingredient",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"libelle\": \"Poulet\",\n    \"type\": \"VIANDE\",\n    \"nombreCalorie\": 239\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/ingredients",
+							"host": ["{{base_url}}"],
+							"path": ["ingredients"]
+						}
+					}
+				},
+				{
+					"name": "Voir tous les ingredients",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "{{base_url}}/ingredients",
+							"host": ["{{base_url}}"],
+							"path": ["ingredients"]
+						}
+					}
+				},
+				{
+					"name": "Filtrer par type",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "{{base_url}}/ingredients/type/LEGUME",
+							"host": ["{{base_url}}"],
+							"path": ["ingredients", "type", "LEGUME"]
+						}
+					}
+				},
+				{
+					"name": "Rechercher par nom",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "{{base_url}}/ingredients/search?q=tomate",
+							"host": ["{{base_url}}"],
+							"path": ["ingredients", "search"],
+							"query": [{"key": "q", "value": "tomate"}]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Recettes",
+			"item": [
+				{
+					"name": "Creer une recette",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"nomPlat\": \"Poulet aux tomates\",\n    \"dureePreparation\": 15,\n    \"dureeCuisson\": 30,\n    \"nombreCalorique\": 350,\n    \"partage\": true,\n    \"createurId\": 1\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/recettes",
+							"host": ["{{base_url}}"],
+							"path": ["recettes"]
+						}
+					}
+				},
+				{
+					"name": "Ajouter ingredient a une recette",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"ingredientId\": 1,\n    \"quantite\": 3.0,\n    \"unite\": \"pieces\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/recettes/1/ingredients",
+							"host": ["{{base_url}}"],
+							"path": ["recettes", "1", "ingredients"]
+						}
+					}
+				},
+				{
+					"name": "Voir une recette",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "{{base_url}}/recettes/1",
+							"host": ["{{base_url}}"],
+							"path": ["recettes", "1"]
+						}
+					}
+				},
+				{
+					"name": "Recettes partagees",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "{{base_url}}/recettes/partagees",
+							"host": ["{{base_url}}"],
+							"path": ["recettes", "partagees"]
+						}
+					}
+				},
+				{
+					"name": "Recettes d'un utilisateur",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/recettes/user/1",
+							"host": ["{{base_url}}"],
+							"path": ["recettes", "user", "1"]
+						}
+					}
+				},
+				{
+					"name": "Rechercher une recette",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "{{base_url}}/recettes/search?q=poulet",
+							"host": ["{{base_url}}"],
+							"path": ["recettes", "search"],
+							"query": [{"key": "q", "value": "poulet"}]
+						}
+					}
+				},
+				{
+					"name": "Activer/desactiver le partage",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/recettes/1/partage",
+							"host": ["{{base_url}}"],
+							"path": ["recettes", "1", "partage"]
+						}
+					}
+				},
+				{
+					"name": "Exporter en PDF",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/recettes/1/export/pdf",
+							"host": ["{{base_url}}"],
+							"path": ["recettes", "1", "export", "pdf"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Utilisateurs",
+			"item": [
+				{
+					"name": "Voir tous les utilisateurs",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/users",
+							"host": ["{{base_url}}"],
+							"path": ["users"]
+						}
+					}
+				},
+				{
+					"name": "Voir un utilisateur",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/users/1",
+							"host": ["{{base_url}}"],
+							"path": ["users", "1"]
+						}
+					}
+				},
+				{
+					"name": "Ajouter un favori",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/users/1/favoris/1",
+							"host": ["{{base_url}}"],
+							"path": ["users", "1", "favoris", "1"]
+						}
+					}
+				},
+				{
+					"name": "Voir les favoris",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/users/1/favoris",
+							"host": ["{{base_url}}"],
+							"path": ["users", "1", "favoris"]
+						}
+					}
+				}
+			]
+		}
+	]
+}
